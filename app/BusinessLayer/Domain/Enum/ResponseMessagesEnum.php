@@ -1,6 +1,6 @@
 <?php
 
-namespace App\BusinessLayer\Infra\Enum;
+namespace App\BusinessLayer\Domain\Enum;
 
 enum ResponseMessagesEnum
 {

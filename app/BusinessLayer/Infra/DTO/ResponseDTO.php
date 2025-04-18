@@ -2,15 +2,17 @@
 
 namespace App\BusinessLayer\Infra\DTO;
 
+use CodeIgniter\HTTP\ResponseInterface;
+
 class ResponseDTO
 {
-    private int $httpStatus = 200;
-    private string $message = "";
+    private int $httpStatus = ResponseInterface::HTTP_OK;
+    private array|string|object $body = "";
 
-    public function __construct(int $httpStatus = 200, string $message = "")
+    public function __construct(int $httpStatus = 200, array|string|object $body = "")
     {
         $this->httpStatus = $httpStatus;
-        $this->message = $message;
+        $this->body = $body;
     }
 
     public function getHttpStatus(): int
@@ -23,13 +25,13 @@ class ResponseDTO
         $this->httpStatus = $httpStatus;
     }
 
-    public function getMessage(): string
+    public function getBody(): string|array|object
     {
-        return $this->message;
+        return $this->body;
     }
 
-    public function setMessage(string $message): void
+    public function setBody(string|array|object $body): void
     {
-        $this->message = $message;
+        $this->body = $body;
     }
 }
