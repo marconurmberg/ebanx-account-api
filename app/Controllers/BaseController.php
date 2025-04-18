@@ -3,7 +3,10 @@
 namespace App\Controllers;
 
 use App\BusinessLayer\Domain\Cache\CacheServiceInterface;
+use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
 use App\BusinessLayer\Infra\Cache\CacheService;
+use App\BusinessLayer\Infra\Repository\UserAccountRepository;
+use App\BusinessLayer\Infra\Service\PersistenceInitializationService;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -31,7 +34,6 @@ abstract class BaseController extends Controller
     protected $request;
 
     protected CacheServiceInterface $cacheService;
-
     /**
      * An array of helpers to be loaded automatically upon
      * class instantiation. These helpers will be available
@@ -57,6 +59,7 @@ abstract class BaseController extends Controller
 
         $cacheDriver = service('cache');
         $this->cacheService = new CacheService($cacheDriver);
+
 
         // Preload any models, libraries, etc, here.
 

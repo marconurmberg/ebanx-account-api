@@ -2,16 +2,15 @@
 
 namespace Tests\Support\BusinessLayer\UseCases;
 
+use App\BusinessLayer\Domain\Enum\ResponseMessagesEnum;
 use App\BusinessLayer\Infra\Cache\CacheService;
-use App\BusinessLayer\Infra\DTO\ResponseDTO;
-use App\BusinessLayer\Infra\Enum\ResponseMessagesEnum;
 use App\BusinessLayer\UseCases\ResetState;
 use PHPUnit\Framework\TestCase;
 
 class ResetStateTest extends TestCase
 {
     /** @dataProvider resetStateDataProvider */
-    public function testResetState($shouldCleanCache, $expectedHttpStatus, $expectedMessage) {
+    public function testResetState(bool $shouldCleanCache, int $expectedHttpStatus, string $expectedMessage) {
         $cacheServiceMock = $this->createMock(CacheService::class);
         $cacheServiceMock->expects($this->once())
             ->method('clean')
@@ -20,7 +19,7 @@ class ResetStateTest extends TestCase
         $useCase = new ResetState($cacheServiceMock);
         $resetStateResponse = $useCase->execute();
         $this->assertEquals($expectedHttpStatus, $resetStateResponse->getHttpStatus());
-        $this->assertEquals($expectedMessage, $resetStateResponse->getMessage());
+        $this->assertEquals($expectedMessage, $resetStateResponse->getBody());
     }
 
     public function testRestStateException()
@@ -34,7 +33,7 @@ class ResetStateTest extends TestCase
         $resetStateResponse = $useCase->execute();
 
         $this->assertEquals(500, $resetStateResponse->getHttpStatus());
-        $this->assertEquals("Test Exception", $resetStateResponse->getMessage());
+        $this->assertEquals("Test Exception", $resetStateResponse->getBody());
     }
 
     public static function resetStateDataProvider() : array

@@ -14,11 +14,11 @@ class StateController extends BaseController
             $resetStateResponse = $useCase->execute();
             return $this->response
                 ->setStatusCode($resetStateResponse->getHttpStatus())
-                ->setBody($resetStateResponse->getMessage());
+                ->setJSON($resetStateResponse->getBody());
         } catch (\Exception $exception) {
             return $this->response
-                ->setStatusCode(500)
-                ->setBody($exception->getMessage());
+                ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+                ->setJSON($exception->getMessage());
         }
     }
 }

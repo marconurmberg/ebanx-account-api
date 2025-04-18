@@ -34,7 +34,7 @@
     </logging>
     <source>
         <include>
-            <directory suffix=".php">./app</directory>
+            <directory suffix=".php">./app/BusinessLayer</directory>
         </include>
         <exclude>
             <directory suffix=".php">./app/Views</directory>
