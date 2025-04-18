@@ -28,7 +28,6 @@ class AccountController extends BaseController
     }
 
     public function getAccountBalance() {
-        //TODO GET BALANCE BY ACCOUNT ID -> Business Layer
         $accountId = $this->request->getGet("account_id");
         if (empty($accountId)) {
             return $this->response
