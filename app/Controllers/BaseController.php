@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\BusinessLayer\Domain\Cache\CacheServiceInterface;
+use App\BusinessLayer\Infra\Cache\CacheService;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -28,6 +30,8 @@ abstract class BaseController extends Controller
      */
     protected $request;
 
+    protected CacheServiceInterface $cacheService;
+
     /**
      * An array of helpers to be loaded automatically upon
      * class instantiation. These helpers will be available
@@ -50,6 +54,9 @@ abstract class BaseController extends Controller
     {
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
+
+        $cacheDriver = service('cache');
+        $this->cacheService = new CacheService($cacheDriver);
 
         // Preload any models, libraries, etc, here.
 
