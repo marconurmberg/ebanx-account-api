@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\BusinessLayer\Domain\Cache\CacheServiceInterface;
+use App\BusinessLayer\Domain\Enum\ResponseMessagesEnum;
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
 use App\BusinessLayer\Infra\Cache\CacheService;
 use App\BusinessLayer\Infra\Repository\UserAccountRepository;
@@ -64,5 +65,12 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = service('session');
+    }
+
+    public function returnMissingRequiredParameters(): ResponseInterface
+    {
+        return $this->response
+            ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
+            ->setBody(ResponseMessagesEnum::RESPONSE_MESSAGE_MISSING_PARAMETERS);
     }
 }

@@ -5,7 +5,7 @@ namespace App\BusinessLayer\Infra\Entity;
 class UserAccountEntity
 {
     private int $accountId;
-    private int $balance;
+    private float $balance;
 
     public function getAccountId(): int
     {
@@ -17,12 +17,12 @@ class UserAccountEntity
         $this->accountId = $accountId;
     }
 
-    public function getBalance(): int
+    public function getBalance(): float
     {
-        return $this->balance;
+        return number_format($this->balance, 2);
     }
 
-    public function setBalance(int $balance): void
+    public function setBalance(float $balance): void
     {
         $this->balance = $balance;
     }

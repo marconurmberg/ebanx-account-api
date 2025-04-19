@@ -17,9 +17,25 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
             "balance" => $userAccountEntity->getBalance(),
         ];
 
+        return $this->fromArrayStructureToResponseDTO($arrayStructure);
+    }
+
+    public function fromDepositEventUserAccountEntityToResponseDTO(UserAccountEntity $userAccountEntity, ResponseDTO $responseDTO): ResponseDTO
+    {
+        $arrayStructure = [
+            "destination" => [
+                "id" => $userAccountEntity->getAccountId(),
+                "balance" => $userAccountEntity->getBalance(),
+            ]
+        ];
+
+        return $this->fromArrayStructureToResponseDTO($arrayStructure);
+    }
+
+    private function fromArrayStructureToResponseDTO(array $arrayStructure): ResponseDTO
+    {
         $responseDTO = new ResponseDTO();
         $responseDTO->setBody($arrayStructure);
         return $responseDTO;
     }
-
 }

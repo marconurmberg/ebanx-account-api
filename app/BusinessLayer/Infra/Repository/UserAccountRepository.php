@@ -5,6 +5,7 @@ namespace App\BusinessLayer\Infra\Repository;
 use App\BusinessLayer\Domain\Cache\CacheServiceInterface;
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
 use App\BusinessLayer\Infra\Entity\UserAccountEntity;
+use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 
 class UserAccountRepository implements UserAccountRepositoryInterface
@@ -31,10 +32,18 @@ class UserAccountRepository implements UserAccountRepositoryInterface
         return $userAccount;
     }
 
+    /**
+     * @throws CouldNotPersistException
+     */
     public function persistUserAccount(UserAccountEntity $userAccount): bool
     {
         $cacheKey = $this->getCacheKey($userAccount->getAccountId());
-        return $this->cacheService->save($cacheKey, $userAccount);
+        $persistUserAccount = $this->cacheService->save($cacheKey, $userAccount);
+
+        if (!$persistUserAccount) {
+            throw new CouldNotPersistException();
+        }
+        return true;
     }
 
     private function getCacheKey($accountId)

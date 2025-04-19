@@ -9,5 +9,5 @@ $routes->get('/', 'Home::index');
 
 
 $routes->post('/reset', 'StateController::resetState');
-$routes->post('/event', 'Event::index');
+$routes->post('/event', 'AccountController::handleAccountOperationEvent');
 $routes->get('/balance', 'AccountController::getAccountBalance');
