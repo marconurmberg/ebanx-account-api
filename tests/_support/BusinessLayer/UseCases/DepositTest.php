@@ -65,7 +65,7 @@ class DepositTest extends TestCase
     public function testExecuteCreatesAccountWhenAccountNotFound(): void
     {
         $accountId = 12345;
-        $depositAmount = 50;
+        $depositAmount = 50.0;
         $inputData = ['destinationAccountId' => $accountId, 'amount' => $depositAmount];
 
         $depositEventDTO = $this->createMock(DepositOperationEventDTO::class);

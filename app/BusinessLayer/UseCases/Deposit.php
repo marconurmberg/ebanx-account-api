@@ -70,6 +70,9 @@ class Deposit implements AccountOperationEventInterface
         return $userAccount;
     }
 
+    /**
+     * @throws CouldNotPersistException
+     */
     private function createUserAccountFromDepositEventDTO(DepositOperationEventDTO $depositEventDTO): UserAccountEntity
     {
         $userAccount = new UserAccountEntity();

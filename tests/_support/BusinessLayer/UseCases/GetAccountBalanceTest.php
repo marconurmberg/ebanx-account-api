@@ -14,7 +14,7 @@ class GetAccountBalanceTest extends TestCase
     public function testGetAccountBalance()
     {
         $userAccountId = 1234;
-        $userAccountBalance = 10;
+        $userAccountBalance = 10.0;
 
         $userAccountRepositoryMock = $this->createMock(UserAccountRepository::class);
         $userAccountEntityMock = $this->createMock(UserAccountEntity::class);

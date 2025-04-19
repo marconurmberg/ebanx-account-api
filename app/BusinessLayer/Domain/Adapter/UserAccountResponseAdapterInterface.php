@@ -11,4 +11,9 @@ interface UserAccountResponseAdapterInterface
         UserAccountEntity $userAccountEntity,
         ResponseDTO $responseDTO
     ): ResponseDTO;
+
+    public function fromDepositEventUserAccountEntityToResponseDTO(
+        UserAccountEntity $userAccountEntity,
+        ResponseDTO $responseDTO
+    ): ResponseDTO;
 }
