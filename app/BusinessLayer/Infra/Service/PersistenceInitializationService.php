@@ -4,6 +4,7 @@ namespace App\BusinessLayer\Infra\Service;
 
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
 use App\BusinessLayer\Infra\Entity\UserAccountEntity;
+use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 
 class PersistenceInitializationService
 {
@@ -20,10 +21,24 @@ class PersistenceInitializationService
         $userAccountsMock = json_decode($jsonMock, true);
 
         foreach ($userAccountsMock["accounts"] as $userAccount) {
-            $userAccountEntity = new UserAccountEntity();
-            $userAccountEntity->setAccountId($userAccount["account_id"]);
-            $userAccountEntity->setBalance($userAccount["balance"]);
-            $this->userAccountRepository->persistUserAccount($userAccountEntity);
+            $accountId = $userAccount["account_id"];
+            $balance = $userAccount["balance"];
+            if (!$this->accountAlreadyExists($accountId)) {
+                $userAccountEntity = new UserAccountEntity();
+                $userAccountEntity->setAccountId($accountId);
+                $userAccountEntity->setBalance($balance);
+                $this->userAccountRepository->persistUserAccount($userAccountEntity);
+            }
         }
+    }
+
+    private function accountAlreadyExists(int $accountId): bool
+    {
+        try {
+            $this->userAccountRepository->getUserAccountByAccountId($accountId);
+        } catch (UserAccountNotFoundException $exception) {
+            return false;
+        }
+        return true;
     }
 }
