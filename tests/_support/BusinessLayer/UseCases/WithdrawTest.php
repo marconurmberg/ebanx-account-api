@@ -21,7 +21,6 @@ class WithdrawTest extends TestCase
     /** @dataProvider successfulWithdrawDataProvider */
     public function testExecuteSuccessfulWithdraw(float $initialBalance, float $withdrawAmount): void
     {
-        // Arrange
         $accountId = 12345;
         $expectedBalance = $initialBalance - $withdrawAmount;
         $inputData = ['originAccountId' => $accountId, 'amount' => $withdrawAmount];
@@ -57,7 +56,6 @@ class WithdrawTest extends TestCase
 
     public function testExecuteWithInsufficientFunds(): void
     {
-        // Arrange
         $accountId = 12345;
         $initialBalance = 50.0;
         $withdrawAmount = 100.0;
@@ -87,7 +85,6 @@ class WithdrawTest extends TestCase
 
     public function testExecuteAccountNotFound(): void
     {
-        // Arrange
         $accountId = 12345;
         $withdrawAmount = 50.0;
         $inputData = ['originAccountId' => $accountId, 'amount' => $withdrawAmount];
@@ -114,7 +111,6 @@ class WithdrawTest extends TestCase
 
     public function testExecuteWithPersistenceError(): void
     {
-        // Arrange
         $accountId = 12345;
         $initialBalance = 100.0;
         $withdrawAmount = 50.0;

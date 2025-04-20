@@ -65,7 +65,6 @@ class DepositTest extends TestCase
         $this->assertEquals($expectedBalance, $existingAccount->getBalance());
     }
 
-
     public function testExecuteCreatesAccountWhenAccountNotFound(): void
     {
         $accountId = 12345;
@@ -100,10 +99,6 @@ class DepositTest extends TestCase
         $this->assertEquals(201, $response->getHttpStatus());
     }
 
-    /**
-     * @test
-     * it returns HTTP_BAD_REQUEST for invalid input
-     */
     public function testExecuteBadInputThrowsBadRequestException(): void
     {
         $accountId = 12345;
@@ -156,7 +151,7 @@ class DepositTest extends TestCase
     public static function successfulDepositDataProvider(): array
     {
         return [
-            "FLOAT_DEPOSIT" => [10.48],
+            "DECIMAL_DEPOSIT" => [10.48],
             "INT_DEPOSIT" => [50]
         ];
     }
