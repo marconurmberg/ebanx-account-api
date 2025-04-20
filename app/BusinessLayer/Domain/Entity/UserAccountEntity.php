@@ -1,6 +1,6 @@
 <?php
 
-namespace App\BusinessLayer\Infra\Entity;
+namespace App\BusinessLayer\Domain\Entity;
 
 class UserAccountEntity
 {

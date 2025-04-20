@@ -3,8 +3,8 @@
 namespace App\BusinessLayer\Infra\Repository;
 
 use App\BusinessLayer\Domain\Cache\CacheServiceInterface;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 

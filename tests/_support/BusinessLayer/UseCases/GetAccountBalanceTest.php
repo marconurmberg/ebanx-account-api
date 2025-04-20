@@ -2,7 +2,7 @@
 
 namespace Tests\Support\BusinessLayer\UseCases;
 
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 use App\BusinessLayer\Infra\Repository\UserAccountRepository;
 use App\BusinessLayer\UseCases\GetAccountBalance;

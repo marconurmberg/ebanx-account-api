@@ -2,8 +2,8 @@
 
 namespace App\BusinessLayer\Domain\Adapter;
 
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 
 interface UserAccountResponseAdapterInterface
 {

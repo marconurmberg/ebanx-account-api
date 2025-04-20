@@ -3,10 +3,11 @@
 namespace App\BusinessLayer\Infra\Adapter;
 
 use App\BusinessLayer\Domain\Adapter\UserAccountResponseAdapterInterface;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 
 //TODO RESPONSE ADAPTER PER EVENT
+//TODO TESTS
 class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
 {
     public function fromUserAccountEntityToResponseDTO(

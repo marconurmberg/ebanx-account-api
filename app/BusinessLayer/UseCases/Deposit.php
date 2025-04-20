@@ -4,11 +4,11 @@ namespace App\BusinessLayer\UseCases;
 
 use App\BusinessLayer\Domain\Adapter\InputToEventDTOAdapterInterface;
 use App\BusinessLayer\Domain\Adapter\UserAccountResponseAdapterInterface;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Domain\Event\AccountOperationEventInterface;
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
 use App\BusinessLayer\Infra\DTO\DepositOperationEventDTO;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\BadRequestException;
 use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;

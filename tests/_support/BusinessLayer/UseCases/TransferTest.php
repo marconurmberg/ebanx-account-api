@@ -4,12 +4,10 @@ namespace Tests\Support\BusinessLayer\UseCases;
 
 use App\BusinessLayer\Domain\Adapter\InputToEventDTOAdapterInterface;
 use App\BusinessLayer\Domain\Adapter\UserAccountResponseAdapterInterface;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
 use App\BusinessLayer\Infra\DTO\TransferOperationEventDTO;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
-use App\BusinessLayer\Infra\Exception\BadRequestException;
 use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
-use App\BusinessLayer\Infra\Exception\InsufficientFundsException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 use App\BusinessLayer\Infra\Repository\UserAccountRepository;
 use App\BusinessLayer\UseCases\Transfer;

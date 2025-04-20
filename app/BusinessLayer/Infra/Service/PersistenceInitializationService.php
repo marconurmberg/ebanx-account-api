@@ -2,8 +2,8 @@
 
 namespace App\BusinessLayer\Infra\Service;
 
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Domain\Repository\UserAccountRepositoryInterface;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 
 class PersistenceInitializationService

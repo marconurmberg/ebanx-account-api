@@ -2,7 +2,7 @@
 
 namespace App\BusinessLayer\Domain\Repository;
 
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 

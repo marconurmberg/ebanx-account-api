@@ -3,10 +3,10 @@
 namespace Tests\Support\BusinessLayer\UseCases;
 
 use App\BusinessLayer\Domain\Adapter\InputToEventDTOAdapterInterface;
+use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Adapter\UserAccountResponseAdapter;
 use App\BusinessLayer\Infra\DTO\DepositOperationEventDTO;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
-use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\Exception\BadRequestException;
 use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
