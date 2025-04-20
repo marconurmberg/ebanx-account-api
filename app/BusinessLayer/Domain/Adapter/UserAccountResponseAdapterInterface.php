@@ -16,4 +16,9 @@ interface UserAccountResponseAdapterInterface
         UserAccountEntity $userAccountEntity,
         ResponseDTO $responseDTO
     ): ResponseDTO;
+
+    public function fromWithdrawEventUserAccountEntityToResponseDTO(
+        UserAccountEntity $userAccountEntity,
+        ResponseDTO $responseDTO
+    ): ResponseDTO;
 }

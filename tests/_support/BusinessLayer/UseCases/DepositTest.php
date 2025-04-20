@@ -29,11 +29,15 @@ class DepositTest extends TestCase
         $depositEventDTO->method('getAmount')->willReturn((float)$depositAmount);
 
         $existingAccount = $this->createUserAccountEntity($accountId, $initialBalance);
+        $userAccountWithNewBalance = clone $existingAccount;
+        $userAccountWithNewBalance->setBalance($expectedBalance);
 
         $repository = $this->createMock(UserAccountRepository::class);
         $repository->method('getUserAccountByAccountId')->willReturn($existingAccount);
         
-        $repository->method('persistUserAccount')->willReturn(true);
+        $repository->method('persistUserAccount')
+            ->with($userAccountWithNewBalance)
+            ->willReturn(true);
 
         $inputAdapter = $this->createMock(InputToEventDTOAdapterInterface::class);
         $inputAdapter->method('inputToDepositOperationEventDTO')->willReturn($depositEventDTO);

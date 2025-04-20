@@ -24,6 +24,6 @@ class UserAccountEntity
 
     public function setBalance(float $balance): void
     {
-        $this->balance = $balance;
+        $this->balance = number_format($balance, 2);
     }
 }
