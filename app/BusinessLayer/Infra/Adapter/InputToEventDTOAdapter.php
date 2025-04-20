@@ -4,10 +4,11 @@ namespace App\BusinessLayer\Infra\Adapter;
 
 use App\BusinessLayer\Domain\Adapter\InputToEventDTOAdapterInterface;
 use App\BusinessLayer\Infra\DTO\DepositOperationEventDTO;
+use App\BusinessLayer\Infra\DTO\TransferOperationEventDTO;
 use App\BusinessLayer\Infra\DTO\WithdrawOperationEventDTO;
 use App\BusinessLayer\Infra\Exception\BadRequestException;
 
-//TODO SPECIALIZED EVENT INPUT ADAPTER
+//TODO SPECIALIZED ADAPTER PER EVENT TYPE
 class InputToEventDTOAdapter implements InputToEventDTOAdapterInterface
 {
     /**
@@ -36,6 +37,17 @@ class InputToEventDTOAdapter implements InputToEventDTOAdapterInterface
         return $withdrawEventDTO;
     }
 
+    public function inputToTransferOperationEventDTO(array $input): TransferOperationEventDTO
+    {
+        $this->validateTransferInputParameters($input);
+        $transferEventDTO = new TransferOperationEventDTO();
+        $transferEventDTO->setEventType($input["type"]);
+        $transferEventDTO->setAmount($input["amount"]);
+        $transferEventDTO->setOriginAccountId($input["origin"]);
+        $transferEventDTO->setDestinationAccountId($input["destination"]);
+        return $transferEventDTO;
+    }
+
     /**
      * @throws BadRequestException
      */
@@ -52,6 +64,15 @@ class InputToEventDTOAdapter implements InputToEventDTOAdapterInterface
     private function validateWithdrawInputParameters(array $input): void
     {
         if (!$this->isValidAmount($input) || !$this->isValidOriginAccountId($input)) {
+            throw new BadRequestException();
+        }
+    }
+
+    private function validateTransferInputParameters(array $input): void
+    {
+        if (!$this->isValidAmount($input) ||
+            !$this->isValidDestinationAccountId($input) ||
+            !$this->isValidOriginAccountId($input)) {
             throw new BadRequestException();
         }
     }

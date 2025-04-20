@@ -12,6 +12,7 @@ use App\BusinessLayer\Infra\Adapter\InputToEventDTOAdapter;
 use App\BusinessLayer\Infra\Adapter\UserAccountResponseAdapter;
 use App\BusinessLayer\Infra\Exception\AccountOperationEventNotFoundException;
 use App\BusinessLayer\UseCases\Deposit;
+use App\BusinessLayer\UseCases\Transfer;
 use App\BusinessLayer\UseCases\Withdraw;
 
 class OperationEventStrategyFactory implements OperationEventStrategyFactoryInterface
@@ -43,6 +44,12 @@ class OperationEventStrategyFactory implements OperationEventStrategyFactoryInte
                 );
             case AccountOperationEventEnum::EVENT_WITHDRAW:
                 return new Withdraw(
+                    $this->userAccountRepository,
+                    $this->inputToEventDTOAdapter,
+                    $this->userAccountResponseAdapter
+                );
+            case AccountOperationEventEnum::EVENT_TRANSFER:
+                return new Transfer(
                     $this->userAccountRepository,
                     $this->inputToEventDTOAdapter,
                     $this->userAccountResponseAdapter

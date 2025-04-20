@@ -3,6 +3,7 @@
 namespace App\BusinessLayer\Domain\Adapter;
 
 use App\BusinessLayer\Infra\DTO\DepositOperationEventDTO;
+use App\BusinessLayer\Infra\DTO\TransferOperationEventDTO;
 use App\BusinessLayer\Infra\DTO\WithdrawOperationEventDTO;
 use App\BusinessLayer\Infra\Exception\BadRequestException;
 
@@ -17,4 +18,9 @@ interface InputToEventDTOAdapterInterface
      * @throws BadRequestException
      */
     public function inputToWithdrawOperationEventDTO(array $input): WithdrawOperationEventDTO;
+
+    /**
+     * @throws BadRequestException
+     */
+    public function inputToTransferOperationEventDTO(array $input): TransferOperationEventDTO;
 }

@@ -6,6 +6,7 @@ use App\BusinessLayer\Domain\Adapter\UserAccountResponseAdapterInterface;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
 use App\BusinessLayer\Infra\Entity\UserAccountEntity;
 
+//TODO RESPONSE ADAPTER PER EVENT
 class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
 {
     public function fromUserAccountEntityToResponseDTO(
@@ -31,7 +32,7 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
             ]
         ];
 
-        return $this->fromArrayStructureToResponseDTO($arrayStructure);
+        return $this->fromArrayStructureToResponseDTO($arrayStructure, $responseDTO);
     }
 
     public function fromWithdrawEventUserAccountEntityToResponseDTO(
@@ -45,12 +46,30 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
             ]
         ];
 
-        return $this->fromArrayStructureToResponseDTO($arrayStructure);
+        return $this->fromArrayStructureToResponseDTO($arrayStructure, $responseDTO);
     }
 
-    private function fromArrayStructureToResponseDTO(array $arrayStructure): ResponseDTO
+    public function fromTransferEventAccountEntitiesToResponseDTO(
+        UserAccountEntity $originUserAccount,
+        UserAccountEntity $destinationUserAccount,
+        ResponseDTO $responseDTO
+    ): ResponseDTO {
+        $arrayStructure = [
+            "origin" => [
+                "id" => $originUserAccount->getAccountId(),
+                "balance" => $originUserAccount->getBalance(),
+            ],
+            "destination" => [
+                "id" => $destinationUserAccount->getAccountId(),
+                "balance" => $destinationUserAccount->getBalance(),
+            ]
+        ];
+
+        return $this->fromArrayStructureToResponseDTO($arrayStructure, $responseDTO);
+    }
+
+    private function fromArrayStructureToResponseDTO(array $arrayStructure, ResponseDTO $responseDTO): ResponseDTO
     {
-        $responseDTO = new ResponseDTO();
         $responseDTO->setBody($arrayStructure);
         return $responseDTO;
     }

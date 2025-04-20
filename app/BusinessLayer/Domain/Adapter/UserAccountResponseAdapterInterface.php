@@ -21,4 +21,10 @@ interface UserAccountResponseAdapterInterface
         UserAccountEntity $userAccountEntity,
         ResponseDTO $responseDTO
     ): ResponseDTO;
+
+    public function fromTransferEventAccountEntitiesToResponseDTO(
+        UserAccountEntity $originUserAccount,
+        UserAccountEntity $destinationUserAccount,
+        ResponseDTO $responseDTO
+    ): ResponseDTO;
 }
