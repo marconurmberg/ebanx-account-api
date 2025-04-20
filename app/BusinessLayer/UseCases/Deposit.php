@@ -37,70 +37,63 @@ class Deposit implements AccountOperationEventInterface
         $responseDTO = new ResponseDTO();
         try {
             $depositEventDTO = $this->inputToDepositEventDTO->inputToDepositOperationEventDTO($inputData);
-            $userAccount = $this->getUserAccountAndUpdateBalanceFromDepositEventDTO($depositEventDTO);
-            $responseDTO = $this->setSuccessfulDepositToResponseDTO($userAccount, $responseDTO);
+            $responseDTO = $this->processDeposit($depositEventDTO, $responseDTO);
         } catch (BadRequestException $exception) {
-            $responseDTO->setHttpStatus(ResponseInterface::HTTP_BAD_REQUEST);
-            $responseDTO->setBody($exception->getMessage());
-        } catch (UserAccountNotFoundException $exception) {
-            $userAccount = $this->createUserAccountFromDepositEventDTO($depositEventDTO);
-            $responseDTO = $this->setSuccessfulDepositToResponseDTO($userAccount, $responseDTO);
+            $this->handleBusinessException($responseDTO, $exception);
         } catch (CouldNotPersistException|\Exception $exception) {
-            $responseDTO->setHttpStatus(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
-            $responseDTO->setBody($exception->getMessage());
+            $this->handleSystemException($responseDTO, $exception);
         }
-
+        
         return $responseDTO;
     }
 
-
-    /**
-     * @throws CouldNotPersistException
-     * @throws UserAccountNotFoundException
-     */
-    private function getUserAccountAndUpdateBalanceFromDepositEventDTO(
-        DepositOperationEventDTO $depositEventDTO
-    ): UserAccountEntity {
-        $userAccount = $this->userAccountRepository->getUserAccountByAccountId(
-            $depositEventDTO->getDestinationAccountId()
-        );
-
-        return $this->depositAmountToUserAccount($depositEventDTO->getAmount(), $userAccount);
-    }
-
     /**
      * @throws CouldNotPersistException
      */
-    public function depositAmountToUserAccount(float $amount, UserAccountEntity $userAccount): UserAccountEntity
+    private function processDeposit(DepositOperationEventDTO $depositEventDTO, ResponseDTO $responseDTO): ResponseDTO
     {
-        $userAccount->setBalance($amount + $userAccount->getBalance());
+        try {
+            $userAccount = $this->userAccountRepository->getUserAccountByAccountId(
+                $depositEventDTO->getDestinationAccountId()
+            );
+        } catch (UserAccountNotFoundException) {
+            $userAccount = $this->createNewUserAccount($depositEventDTO->getDestinationAccountId());
+        }
+        
+        $this->executeDeposit($userAccount, $depositEventDTO->getAmount());
+        
         $this->userAccountRepository->persistUserAccount($userAccount);
-
-        return $userAccount;
-    }
-
-    /**
-     * @throws CouldNotPersistException
-     */
-    private function createUserAccountFromDepositEventDTO(DepositOperationEventDTO $depositEventDTO): UserAccountEntity
-    {
-        $userAccount = new UserAccountEntity();
-        $userAccount->setAccountId($depositEventDTO->getDestinationAccountId());
-        $userAccount->setBalance($depositEventDTO->getAmount());
-        $this->userAccountRepository->persistUserAccount($userAccount);
-        return $userAccount;
-    }
-
-    private function setSuccessfulDepositToResponseDTO(
-        UserAccountEntity $userAccount,
-        ResponseDTO $responseDTO): ResponseDTO {
-
-        $responseDTO = $this->userAccountResponseAdapter->fromDepositEventUserAccountEntityToResponseDTO(
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_CREATED);;
+        
+        return $this->userAccountResponseAdapter->fromDepositEventUserAccountEntityToResponseDTO(
             $userAccount,
             $responseDTO
         );
-        $responseDTO->setHttpStatus(ResponseInterface::HTTP_CREATED);
+    }
 
-        return $responseDTO;
+    private function createNewUserAccount(int $accountId): UserAccountEntity
+    {
+        $userAccount = new UserAccountEntity();
+        $userAccount->setAccountId($accountId);
+        $userAccount->setBalance(0);
+        
+        return $userAccount;
+    }
+
+    private function executeDeposit(UserAccountEntity $userAccount, float $amount): void
+    {
+        $userAccount->setBalance($userAccount->getBalance() + $amount);
+    }
+
+    private function handleBusinessException(ResponseDTO $responseDTO, \Exception $exception): void
+    {
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_BAD_REQUEST);
+        $responseDTO->setBody($exception->getMessage());
+    }
+
+    private function handleSystemException(ResponseDTO $responseDTO, \Exception $exception): void
+    {
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+        $responseDTO->setBody($exception->getMessage());
     }
 }

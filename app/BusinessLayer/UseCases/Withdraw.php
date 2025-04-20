@@ -35,61 +35,73 @@ class Withdraw implements AccountOperationEventInterface
     public function execute(array $inputData): ResponseDTO
     {
         $responseDTO = new ResponseDTO();
+        
         try {
             $withdrawEventDTO = $this->inputToDepositEventDTO->inputToWithdrawOperationEventDTO($inputData);
-            $userAccount = $this->getUserAccountAndUpdateBalanceFromWithdrawEvent($withdrawEventDTO);
-            $responseDTO = $this->userAccountResponseAdapter->fromWithdrawEventUserAccountEntityToResponseDTO(
-                $userAccount,
-                $responseDTO
-            );
+            $responseDTO = $this->processWithdraw($withdrawEventDTO, $responseDTO);
         } catch (BadRequestException|InsufficientFundsException $exception) {
-            $responseDTO->setHttpStatus(ResponseInterface::HTTP_BAD_REQUEST);
-            $responseDTO->setBody($exception->getMessage());
+            $this->handleBusinessException($responseDTO, $exception);
         } catch (UserAccountNotFoundException $exception) {
-            $responseDTO->setHttpStatus(ResponseInterface::HTTP_NOT_FOUND);
-            $responseDTO->setBody(0);
+            $this->handleUserNotFoundException($responseDTO);
         } catch (CouldNotPersistException|\Exception $exception) {
-            $responseDTO->setHttpStatus(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
-            $responseDTO->setBody($exception->getMessage());
+            $this->handleSystemException($responseDTO, $exception);
         }
-
+        
         return $responseDTO;
     }
 
     /**
-     * @throws InsufficientFundsException|UserAccountNotFoundException|CouldNotPersistException
+     * @throws InsufficientFundsException
+     * @throws UserAccountNotFoundException
+     * @throws CouldNotPersistException
      */
-    private function getUserAccountAndUpdateBalanceFromWithdrawEvent(
-        WithdrawOperationEventDTO $withdrawEventDTO
-    ): UserAccountEntity {
+    private function processWithdraw(WithdrawOperationEventDTO $withdrawEventDTO, ResponseDTO $responseDTO): ResponseDTO
+    {
         $userAccount = $this->userAccountRepository->getUserAccountByAccountId(
             $withdrawEventDTO->getOriginAccountId()
         );
-
-        return $this->validateAccountBalanceAndWithdraw($userAccount, $withdrawEventDTO);
+        
+        $this->validateWithdraw($userAccount, $withdrawEventDTO->getAmount());
+        $this->executeWithdraw($userAccount, $withdrawEventDTO->getAmount());
+        
+        $this->userAccountRepository->persistUserAccount($userAccount);
+        
+        return $this->userAccountResponseAdapter->fromWithdrawEventUserAccountEntityToResponseDTO(
+            $userAccount,
+            $responseDTO
+        );
     }
 
     /**
-     * @throws InsufficientFundsException|CouldNotPersistException
+     * @throws InsufficientFundsException
      */
-    private function validateAccountBalanceAndWithdraw(
-        UserAccountEntity $userAccount,
-        WithdrawOperationEventDTO $withdrawEventDTO
-    ): UserAccountEntity {
-        if (!$this->hasSufficientFunds($userAccount, $withdrawEventDTO)) {
+    private function validateWithdraw(UserAccountEntity $userAccount, float $amount): void
+    {
+        if ($userAccount->getBalance() < $amount) {
             throw new InsufficientFundsException();
         }
-        $newBalance = $userAccount->getBalance() - $withdrawEventDTO->getAmount();
-        $userAccount->setBalance($newBalance);
-        $this->userAccountRepository->persistUserAccount($userAccount);
-
-        return $userAccount;
     }
 
-    private function hasSufficientFunds(
-        UserAccountEntity $userAccount,
-        WithdrawOperationEventDTO $withdrawEventDTO
-    ): bool {
-        return $userAccount->getBalance() >= $withdrawEventDTO->getAmount();
+    private function executeWithdraw(UserAccountEntity $userAccount, float $amount): void
+    {
+        $userAccount->setBalance($userAccount->getBalance() - $amount);
+    }
+
+    private function handleBusinessException(ResponseDTO $responseDTO, \Exception $exception): void
+    {
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_BAD_REQUEST);
+        $responseDTO->setBody($exception->getMessage());
+    }
+
+    private function handleUserNotFoundException(ResponseDTO $responseDTO): void
+    {
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_NOT_FOUND);
+        $responseDTO->setBody(0);
+    }
+
+    private function handleSystemException(ResponseDTO $responseDTO, \Exception $exception): void
+    {
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+        $responseDTO->setBody($exception->getMessage());
     }
 }

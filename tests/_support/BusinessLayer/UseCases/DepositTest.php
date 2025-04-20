@@ -87,6 +87,7 @@ class DepositTest extends TestCase
         $adapter->method('inputToDepositOperationEventDTO')->willReturn($depositEventDTO);
 
         $responseDTO = new ResponseDTO();
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_CREATED);
         $responseAdapter = $this->createMock(UserAccountResponseAdapter::class);
         $responseAdapter->method('fromDepositEventUserAccountEntityToResponseDTO')
             ->willReturn($responseDTO);
