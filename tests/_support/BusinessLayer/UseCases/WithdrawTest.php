@@ -18,10 +18,12 @@ use PHPUnit\Framework\TestCase;
 class WithdrawTest extends TestCase
 {
     /** @dataProvider successfulWithdrawDataProvider */
-    public function testExecuteSuccessfulWithdraw(float $initialBalance, float $withdrawAmount): void
-    {
+    public function testExecuteSuccessfulWithdraw(
+        float $initialBalance,
+        float $withdrawAmount,
+        float $expectedBalance
+    ): void {
         $accountId = 12345;
-        $expectedBalance = $initialBalance - $withdrawAmount;
         $inputData = ['originAccountId' => $accountId, 'amount' => $withdrawAmount];
         
         $withdrawEventDTO = $this->createMock(WithdrawOperationEventDTO::class);
@@ -148,9 +150,9 @@ class WithdrawTest extends TestCase
     public static function successfulWithdrawDataProvider(): array
     {
         return [
-            "PARTIAL_WITHDRAW" => [100.0, 50.0],
-            "FULL_WITHDRAW" => [100.0, 100.0],
-            "DECIMAL_WITHDRAW" => [100.50, 50.25]
+            "PARTIAL_WITHDRAW" => [100.0, 50.0, 50.0],
+            "FULL_WITHDRAW" => [100.0, 100.0, 0.0],
+            "DECIMAL_WITHDRAW" => [100.50, 50.25, 50.25]
         ];
     }
 }

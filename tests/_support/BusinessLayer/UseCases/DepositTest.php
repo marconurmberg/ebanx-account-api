@@ -19,12 +19,12 @@ use PHPUnit\Framework\TestCase;
 class DepositTest extends TestCase
 {
     /** @dataProvider successfulDepositDataProvider */
-    public function testExecuteSuccessfulDeposit($depositAmount): void
-    {
+    public function testExecuteSuccessfulDeposit(
+        float $depositAmount,
+        float $initialBalance,
+        float $expectedBalance
+    ): void {
         $accountId = 12345;
-        $initialBalance = 50;
-        $expectedBalance = number_format($initialBalance + $depositAmount, 2);
-        
         $inputData = ['destinationAccountId' => $accountId, 'amount' => $depositAmount];
         $depositEventDTO = $this->createMock(DepositOperationEventDTO::class);
         $depositEventDTO->method('getAmount')->willReturn((float)$depositAmount);
@@ -153,8 +153,8 @@ class DepositTest extends TestCase
     public static function successfulDepositDataProvider(): array
     {
         return [
-            "DECIMAL_DEPOSIT" => [10.48],
-            "INT_DEPOSIT" => [50]
+            "DECIMAL_DEPOSIT" => [10.48, 50.00, 60.48],
+            "INT_DEPOSIT" => [50.00, 50.00, 100.00]
         ];
     }
 }
