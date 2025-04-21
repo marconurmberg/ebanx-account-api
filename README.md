@@ -1,52 +1,43 @@
-# CodeIgniter 4 Application Starter
+# EBANX Technical Test - Bank System
 
-## What is CodeIgniter?
+## Technologies Used
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+- PHP 8.4
+- PHPUnit 10.5.45
+- CodeIgniter 4.6.0
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## About the Solution
+The application developed uses the CodeIgniter 4 framework structure. Despite that, the Business Rules Layer is decoupled from the framework and was "inspired" by Clean Architecture principles.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+A "persistence mechanism" was implemented through CACHING (File-based caching) to store the app state, which its feature was ready to use through CodeIgniter.
+Some design patterns were used:
+#### Creational Patterns
+- **Factory**: decided to use factory to create the correct use case strategy, with its dependencies, to be used in the Event Context (on it's controller method).
+#### Structural Patterns
+- **Adapter**: used to adapt the input data structure to the application's interface (to DTO's). Also used to adapt the other way round - application's interface to output (from DTO's).
+- **Facade**: to make the "persistence mechanism", a cache service interface was defined on the app's Domain. This interface is used to invert the dependency between the Business Layer and the framework. This way, implementing the interface, a service was created acting as a Facade using framework's cache service. This keeps Business Layer's required cache interface and makes possible to use framework's services without creating a coupled dependency, since an interface was defined.
+#### Behavioral Patterns
+- **Strategy**: used to better "organize" all types of events and make it easier to execute the Event Context, since the context's method core is the same to any event strategy.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Project Structure
+Clean Architecture "kinda" inspires the folder structure.
+- **app**: contains the BusinessLayer core and the framework structure, such as Controllers and Models.
+- **app/BusinessLayer:** contains the core the application.
+    - **UseCases**: contains all the use cases of the application.
+    - **Domain**: contains the domain of the application such as the interfaces and entities.
+    - **Infra**: contains the implementation of the application's infrastructure.
 
-## Installation & updates
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+### Tests
+The unit tests directory was configured only to the BusinessLayer core.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
 
 ## Setup
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+#### Install dependencies
+`composer install`
 
-## Important Change with index.php
-
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+Copy `env.example` to `.env`. It's ready to run locally.
 
 ## Server Requirements
 
@@ -55,14 +46,8 @@ PHP version 8.1 or higher is required, with the following extensions installed:
 - [intl](http://php.net/manual/en/intl.requirements.php)
 - [mbstring](http://php.net/manual/en/mbstring.installation.php)
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
-
 Additionally, make sure that the following extensions are enabled in your PHP:
-
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
