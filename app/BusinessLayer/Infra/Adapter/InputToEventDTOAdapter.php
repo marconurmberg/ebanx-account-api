@@ -9,7 +9,6 @@ use App\BusinessLayer\Infra\DTO\WithdrawOperationEventDTO;
 use App\BusinessLayer\Infra\Exception\BadRequestException;
 
 //TODO SPECIALIZED ADAPTER PER EVENT TYPE
-//TODO TESTS
 class InputToEventDTOAdapter implements InputToEventDTOAdapterInterface
 {
     /**

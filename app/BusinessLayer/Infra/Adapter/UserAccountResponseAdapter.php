@@ -8,7 +8,6 @@ use App\BusinessLayer\Infra\DTO\ResponseDTO;
 use CodeIgniter\HTTP\ResponseInterface;
 
 //TODO RESPONSE ADAPTER PER EVENT
-//TODO TESTS
 class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
 {
     public function fromUserAccountEntityToResponseDTO(
