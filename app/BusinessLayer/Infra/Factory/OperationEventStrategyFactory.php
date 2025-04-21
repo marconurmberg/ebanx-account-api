@@ -57,7 +57,6 @@ class OperationEventStrategyFactory implements OperationEventStrategyFactoryInte
             default:
                 throw new AccountOperationEventNotFoundException();
         }
-        // TODO: Implement create() method.
     }
 
 }

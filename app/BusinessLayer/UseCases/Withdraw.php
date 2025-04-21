@@ -15,6 +15,7 @@ use App\BusinessLayer\Infra\Exception\InsufficientFundsException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 use CodeIgniter\HTTP\ResponseInterface;
 
+//TODO RESPONSE HANDLER (ADAPTER) to each case
 class Withdraw implements AccountOperationEventInterface
 {
     private UserAccountRepositoryInterface $userAccountRepository;
@@ -65,7 +66,7 @@ class Withdraw implements AccountOperationEventInterface
         $this->executeWithdraw($userAccount, $withdrawEventDTO->getAmount());
         
         $this->userAccountRepository->persistUserAccount($userAccount);
-        
+
         return $this->userAccountResponseAdapter->fromWithdrawEventUserAccountEntityToResponseDTO(
             $userAccount,
             $responseDTO

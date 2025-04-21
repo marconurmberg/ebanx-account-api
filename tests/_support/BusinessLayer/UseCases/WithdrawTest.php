@@ -14,6 +14,7 @@ use App\BusinessLayer\UseCases\Withdraw;
 use CodeIgniter\HTTP\ResponseInterface;
 use PHPUnit\Framework\TestCase;
 
+//TODO REFACTOR TEST STRUCTURE
 class WithdrawTest extends TestCase
 {
     /** @dataProvider successfulWithdrawDataProvider */

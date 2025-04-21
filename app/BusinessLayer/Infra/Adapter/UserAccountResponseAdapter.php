@@ -5,6 +5,7 @@ namespace App\BusinessLayer\Infra\Adapter;
 use App\BusinessLayer\Domain\Adapter\UserAccountResponseAdapterInterface;
 use App\BusinessLayer\Domain\Entity\UserAccountEntity;
 use App\BusinessLayer\Infra\DTO\ResponseDTO;
+use CodeIgniter\HTTP\ResponseInterface;
 
 //TODO RESPONSE ADAPTER PER EVENT
 //TODO TESTS
@@ -15,11 +16,11 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
         ResponseDTO $responseDTO
     ): ResponseDTO {
         $arrayStructure = [
-            "id" => $userAccountEntity->getAccountId(),
+            "id" => (string) $userAccountEntity->getAccountId(),
             "balance" => $userAccountEntity->getBalance(),
         ];
 
-        return $this->fromArrayStructureToResponseDTO($arrayStructure);
+        return $this->fromArrayStructureToResponseDTO($arrayStructure, $responseDTO);
     }
 
     public function fromDepositEventUserAccountEntityToResponseDTO(
@@ -28,7 +29,7 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
     ): ResponseDTO {
         $arrayStructure = [
             "destination" => [
-                "id" => $userAccountEntity->getAccountId(),
+                "id" => (string) $userAccountEntity->getAccountId(),
                 "balance" => $userAccountEntity->getBalance(),
             ]
         ];
@@ -42,7 +43,7 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
     ): ResponseDTO {
         $arrayStructure = [
             "origin" => [
-                "id" => $userAccountEntity->getAccountId(),
+                "id" => (string) $userAccountEntity->getAccountId(),
                 "balance" => $userAccountEntity->getBalance(),
             ]
         ];
@@ -57,11 +58,11 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
     ): ResponseDTO {
         $arrayStructure = [
             "origin" => [
-                "id" => $originUserAccount->getAccountId(),
+                "id" => (string) $originUserAccount->getAccountId(),
                 "balance" => $originUserAccount->getBalance(),
             ],
             "destination" => [
-                "id" => $destinationUserAccount->getAccountId(),
+                "id" => (string) $destinationUserAccount->getAccountId(),
                 "balance" => $destinationUserAccount->getBalance(),
             ]
         ];
@@ -72,6 +73,7 @@ class UserAccountResponseAdapter implements UserAccountResponseAdapterInterface
     private function fromArrayStructureToResponseDTO(array $arrayStructure, ResponseDTO $responseDTO): ResponseDTO
     {
         $responseDTO->setBody($arrayStructure);
+        $responseDTO->setHttpStatus(ResponseInterface::HTTP_CREATED);
         return $responseDTO;
     }
 }

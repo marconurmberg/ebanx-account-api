@@ -15,6 +15,7 @@ use App\BusinessLayer\UseCases\Deposit;
 use CodeIgniter\HTTP\ResponseInterface;
 use PHPUnit\Framework\TestCase;
 
+//TODO REFACTOR TEST STRUCTURE
 class DepositTest extends TestCase
 {
     /** @dataProvider successfulDepositDataProvider */

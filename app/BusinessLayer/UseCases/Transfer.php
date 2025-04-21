@@ -15,6 +15,7 @@ use App\BusinessLayer\Infra\Exception\InsufficientFundsException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 use CodeIgniter\HTTP\ResponseInterface;
 
+//TODO RESPONSE HANDLER (ADAPTER) to each case
 class Transfer implements AccountOperationEventInterface
 {
     private UserAccountRepositoryInterface $userAccountRepository;
@@ -70,7 +71,7 @@ class Transfer implements AccountOperationEventInterface
         
         $this->userAccountRepository->persistUserAccount($originAccount);
         $this->userAccountRepository->persistUserAccount($destinationAccount);
-        
+
         return $this->userAccountResponseAdapter->fromTransferEventAccountEntitiesToResponseDTO(
             $originAccount,
             $destinationAccount,

@@ -14,6 +14,7 @@ use App\BusinessLayer\Infra\Exception\CouldNotPersistException;
 use App\BusinessLayer\Infra\Exception\UserAccountNotFoundException;
 use CodeIgniter\HTTP\ResponseInterface;
 
+//TODO RESPONSE HANDLER (ADAPTER) to each case
 class Deposit implements AccountOperationEventInterface
 {
     private UserAccountRepositoryInterface $userAccountRepository;
@@ -61,10 +62,9 @@ class Deposit implements AccountOperationEventInterface
         }
         
         $this->executeDeposit($userAccount, $depositEventDTO->getAmount());
-        
+
         $this->userAccountRepository->persistUserAccount($userAccount);
-        $responseDTO->setHttpStatus(ResponseInterface::HTTP_CREATED);;
-        
+
         return $this->userAccountResponseAdapter->fromDepositEventUserAccountEntityToResponseDTO(
             $userAccount,
             $responseDTO
